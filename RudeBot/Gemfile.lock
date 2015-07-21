@@ -1,0 +1,12 @@
+GEM
+  specs:
+    markov_chains (0.1.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  markov_chains
+
+BUNDLED WITH
+   1.10.5
