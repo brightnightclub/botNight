@@ -21,9 +21,12 @@ def flatten(hash_input)
 end
 
 def thesaurize(words, sentence)
-  max_word = words.max_by { |word| word.length }
+  return if words.empty?
+
+  max_word = words.sample
   max_word.gsub!(/[^a-zA-Z]/, "")
   uri = URI.parse("http://words.bighugelabs.com/api/2/#{API_KEY}/#{max_word}/json")
+  puts uri
   response = Net::HTTP.get_response(uri)
 
   case response
@@ -31,10 +34,10 @@ def thesaurize(words, sentence)
     j = JSON.parse(response.body)
     thesaurus_entry = flatten(j)
     new_word = thesaurus_entry.max_by { |word| word.length }
-    sentence.gsub!(max_word, new_word)
+    puts new_word
+    sentence.gsub!(/\b#{max_word}\b/, new_word)
   #  words.length > 0
   else
-    puts response.code
     if words.length > 0 && $tries > 0
       $tries -= 1
       words.delete(max_word)
@@ -56,7 +59,10 @@ loop do
   sentences.each do |sentence|
     $tries = 3
     words = sentence.split(/[ \-,;:]/)
-    thesaurize(words, sentence)
+    iterations = (words.length / 5) + 1
+    iterations.times do
+      thesaurize(words, sentence)
+    end
     user_output << "#{sentence}. "
   end
 
