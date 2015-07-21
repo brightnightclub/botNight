@@ -1,45 +1,45 @@
-QUITTERS = ["exit", "quit", "x", "q", "bye"]
-RESPONSES = {
-  "yn": [],
-  "personal": [],
-  "coding": [],
-  "comments": []
-}
-
-YN = ["or", "yes", "no", "either", "do", "does"]
-PERSONAL = ["you", "u", "your", "u're", "you're", "ur", "bot", "bots", "imposterbot", "robot",
-   "robots", "prefer", "preference", "like", "dislike"]
-CODING = ["ruby", "python", "javascript", "oop", "debug", "code", "coding", "computer", "mac",
-  "terminal", "sublime", "framework", "rails", "developer", "development", "stuck", "problem", "stack overflow", "google"]
+require_relative "constants"
 
 puts "Hello Friend, how can I help?"
 
 running = true
 
-
-
 class ImposterBot
   def self.process(input)
+    exit?(input)
+    puts RESPONSES[sort_question(parse_input(input)).to_sym].sample
+  end
+
+  def self.parse_input(input)
+    input.downcase.split " "
+  end
+
+  def self.sort_question(input)
+    if find_match(input, YN)
+      return "yn"
+    elsif find_match(input, PERSONAL)
+      return "personal"
+    elsif find_match(input, CODING)
+      return "coding"
+    else
+      return "comments"
+    end
+  end
+
+  def self.exit?(input)
     if QUITTERS.include? input.downcase
       puts "Goodbye"
       exit
     end
-
-    puts "Hhhhhhmmmmmm, interesting thought..."
   end
 
-  def self.sort_question(input)
-    input = input.downcase
-
-    if YN.include? input
-      q_type = "yn"
-    elsif PERSONAL.include? input
-      q_type = "personal"
-    elsif CODING.include? input
-      q_type = "coding"
-    else
-      q_type = "comments"
+  def self.find_match(input_arr, type_arr)
+    input_arr.each do |i|
+      type_arr.each do |t|
+        return true if i == t
+      end
     end
+    false
   end
 
 end
