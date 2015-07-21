@@ -5,7 +5,7 @@ text = open("book.txt").read
 
 generator = MarkovChains::Generator.new(text)
 
-puts "It's perhaps fitting that I write this introduction in jail- that graduate school of survival."
+puts "It's perhaps fitting that I write this introduction in jail - that graduate school of survival - I'm Chaz."
 
 #This puts it into a raw mode and removes the part where you see what you're typing
 def read_char()
